@@ -1,0 +1,66 @@
+﻿@model TipoPlantilla
+
+@{
+    ViewData["Title"] = "Crear Tipo de Plantilla";
+}
+
+
+<h1>Crear tipo de plantilla</h1>
+
+@*
+    Hay dos tipos de validaciones:
+    1. Errores de campo
+    2. Errores de modelo
+*@
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-controller="TipoPlantilla" asp-action="Create">
+    <div class="mb-3">
+        <label asp-for="TipoDePlantilla"
+               class="col-form-label">
+        </label>
+        <input type="text"
+               asp-for="TipoDePlantilla"
+               class="form-control" />
+        <span asp-validation-for="TipoDePlantilla" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EsActiva"
+               class="col-form-label">
+        </label>
+        <input type="text"
+               asp-for="EsActiva"
+               class="form-control" />
+        <span asp-validation-for="EsActiva" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="UsuarioLog"
+               class="col-form-label">
+        </label>
+        <input type="text"
+               asp-for="UsuarioLog"
+               class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Codigo"
+               class="col-form-label">
+        </label>
+        <input type="text"
+               asp-for="Codigo"
+               class="form-control" />
+        <span asp-validation-for="Codigo" class="text-danger"></span>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Enviar
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
