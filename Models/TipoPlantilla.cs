@@ -1,4 +1,5 @@
-﻿using PresupuestoDemo.Validaciones;
+﻿using Microsoft.AspNetCore.Mvc;
+using PresupuestoDemo.Validaciones;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,7 @@ namespace PresupuestoDemo.Models
         [Required(ErrorMessage = "El campo Tipo de Plantilla es requerido")]
         [Display(Name = "Tipo de plantilla")]
         [PrimeraLetraMayuscula]
+        [Remote(action: "VerificarExisteTipoPlantilla", controller: "TipoPlantilla")]
         public string TipoDePlantilla { get; set; }
 
         [Required(ErrorMessage = "El campo Activa es requerido")]
@@ -22,6 +24,7 @@ namespace PresupuestoDemo.Models
 
         public string UsuarioLog { get; set; }
 
+        //TODO: Este campo no funciona con la inserccion
         internal DateTime FechaModificacionLog { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
