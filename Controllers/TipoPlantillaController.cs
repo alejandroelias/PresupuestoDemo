@@ -14,10 +14,14 @@ namespace PresupuestoDemo.Controllers
     public class TipoPlantillaController : Controller
     {
         private readonly IRepositorioTipoPlantilla repositorioTipoPlantilla;
+        private readonly IServicioUsuarios servicioUsuarios;
 
-        public TipoPlantillaController(IRepositorioTipoPlantilla repositorioTipoPlantilla)
+        public TipoPlantillaController(
+            IRepositorioTipoPlantilla repositorioTipoPlantilla,
+            IServicioUsuarios servicioUsuarios)
         {
             this.repositorioTipoPlantilla = repositorioTipoPlantilla;
+            this.servicioUsuarios = servicioUsuarios;
         }
 
         public IActionResult Index()
@@ -36,6 +40,9 @@ namespace PresupuestoDemo.Controllers
                 return View(tipoPlantilla);
             }
 
+            //@UsuarioLog, se lee de manera dinamica
+            tipoPlantilla.UsuarioLog = servicioUsuarios.GetUserLog();
+
             var yaExisteTipoPlantilla = await repositorioTipoPlantilla.ExisteTipoPlantilla(tipoPlantilla.TipoDePlantilla);
 
             if (yaExisteTipoPlantilla)
@@ -49,6 +56,20 @@ namespace PresupuestoDemo.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Update (int plantillaID)
+        {
+            string usuarioLog = servicioUsuarios.GetUserLog();
+            var tipoPlantilla = await repositorioTipoPlantilla.GetByID(plantillaID, usuarioLog);
+
+            if (tipoPlantilla is null)
+            {
+                //return RedirectToAction("NoEncontrado","Home");
+            }
+            return View(tipoPlantilla);
+        }
+
         [HttpGet]
         public async Task<IActionResult> VerificarExisteTipoPlantilla(string tipoDePlantilla)
         {

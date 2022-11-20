@@ -13,6 +13,9 @@ namespace PresupuestoDemo.Servicios
     {
         Task Create(TipoPlantilla tipoPlantilla);
         Task<bool> ExisteTipoPlantilla(string descripcionPlantilla);
+        Task<TipoPlantilla> GetByID(int tipoPlantillaID, string usuarioLog);
+        Task<IEnumerable<TipoPlantilla>> Get(int plantillaID);
+        Task Update(TipoPlantilla tipoPlantilla);
     }
 
     public class RepositorioTipoPlantilla : IRepositorioTipoPlantilla
@@ -36,8 +39,6 @@ namespace PresupuestoDemo.Servicios
             tipoPlantilla.Id_TipoPlantilla = idTipoPlantilla;
         }
 
-
-
         //Metodo de validacion de ingreso de datos 
         public async Task<bool> ExisteTipoPlantilla(string tipoPlantilla)
         {
@@ -49,6 +50,33 @@ namespace PresupuestoDemo.Servicios
                 new { tipoPlantilla });
 
             return existeTipoPlantilla == 1;
+        }
+
+        public async Task<IEnumerable<TipoPlantilla>> Get(int plantillaID)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.QueryAsync<TipoPlantilla>(@"SELECT *
+                                                                FROM [GRL].[TipoPlantilla]",
+                                                                new { plantillaID });
+        }
+
+        public async Task Update(TipoPlantilla tipoPlantilla)
+        {
+            using var connection = new SqlConnection(connectionString);
+            await connection.ExecuteAsync(@"UPDATE GRL.TipoPlantilla SET TipoPlantilla=@TipoPlantilla WHERE Id_TipoPlantilla=@Id_TipoPlantilla", tipoPlantilla);
+        }
+
+        public async Task<TipoPlantilla> GetByID(int tipoPlantillaID, string usuarioLog)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.QueryFirstOrDefaultAsync<TipoPlantilla>(@"SELECT [Id_TipoPlantilla]
+                                                                              ,[TipoPlantilla]
+                                                                              ,[EsActiva]
+                                                                              ,[UsuarioLog]
+                                                                              ,[Codigo]
+                                                                          FROM [Presupuesto].[GRL].[TipoPlantilla]
+                                                                          WHERE [Id_TipoPlantilla]=@Id_TipoPlantilla AND                                                    [UsuarioLog]=@UsuarioLog",
+                                                                          new { tipoPlantillaID, usuarioLog}); 
         }
     }
 }
