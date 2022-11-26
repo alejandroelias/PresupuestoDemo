@@ -63,7 +63,8 @@ namespace PresupuestoDemo.Servicios
         public async Task Update(TipoPlantilla tipoPlantilla)
         {
             using var connection = new SqlConnection(connectionString);
-            await connection.ExecuteAsync(@"UPDATE GRL.TipoPlantilla SET TipoPlantilla=@TipoPlantilla WHERE Id_TipoPlantilla=@Id_TipoPlantilla", tipoPlantilla);
+            await connection.ExecuteAsync(@"UPDATE GRL.TipoPlantilla SET TipoPlantilla=@TipoPlantilla 
+                                            WHERE Id_TipoPlantilla=@Id_TipoPlantilla", tipoPlantilla);
         }
 
         public async Task<TipoPlantilla> GetByID(int tipoPlantillaID, string usuarioLog)
@@ -74,8 +75,9 @@ namespace PresupuestoDemo.Servicios
                                                                               ,[EsActiva]
                                                                               ,[UsuarioLog]
                                                                               ,[Codigo]
-                                                                          FROM [Presupuesto].[GRL].[TipoPlantilla]
-                                                                          WHERE [Id_TipoPlantilla]=@Id_TipoPlantilla AND                                                    [UsuarioLog]=@UsuarioLog",
+                                                                            FROM [Presupuesto].[GRL].[TipoPlantilla]
+                                                                            WHERE [Id_TipoPlantilla]=@Id_TipoPlantilla 
+                                                                            AND [UsuarioLog]=@UsuarioLog",
                                                                           new { tipoPlantillaID, usuarioLog}); 
         }
     }

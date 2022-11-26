@@ -23,6 +23,12 @@ namespace PresupuestoDemo.Controllers
             return View();
         }
 
+        public IActionResult NoEncontrado()
+        {
+            return View();
+        }
+
+
         public IActionResult Privacy()
         {
             return View();

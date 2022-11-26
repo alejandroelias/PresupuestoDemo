@@ -54,7 +54,7 @@ namespace PresupuestoDemo.Controllers
 
             await repositorioTipoPlantilla.Create(tipoPlantilla);
 
-            return View();
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -65,9 +65,24 @@ namespace PresupuestoDemo.Controllers
 
             if (tipoPlantilla is null)
             {
-                //return RedirectToAction("NoEncontrado","Home");
+                return RedirectToAction("NoEncontrado", "Home");
             }
             return View(tipoPlantilla);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Update (TipoPlantilla tipoPlantilla)
+        {
+            string usuarioLog = servicioUsuarios.GetUserLog();
+            var tipoCuentaExiste = await repositorioTipoPlantilla.GetByID(tipoPlantilla.Id_TipoPlantilla, usuarioLog);
+
+            if (tipoCuentaExiste is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+
+            await repositorioTipoPlantilla.Update(tipoPlantilla);
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

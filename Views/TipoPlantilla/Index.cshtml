@@ -1,0 +1,33 @@
+﻿@model IEnumerable<TipoPlantilla>
+@{
+    ViewData["Title"] = "Tipos Plantillas";
+}
+
+<h1>Tipos de Plantillas</h1>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Nuevo Tipo Plantilla</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Acciones</th>
+            <th>Descripcion</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var tipoCuenta in Model)
+        {
+            <tr>
+                <td>
+                    <a class="btn btn-primary">Editar</a>
+                    <a class="btn btn-danger">Eliminar</a>
+                </td>
+                <td>
+                    @tipoCuenta.TipoDePlantilla
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
