@@ -24,16 +24,18 @@ namespace PresupuestoDemo.Controllers
             this.servicioUsuarios = servicioUsuarios;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            //tipoPlantilla.UsuarioLog = servicioUsuarios.GetUserLog();
+            var tipoPlantilla = await repositorioTipoPlantilla.Get();
+            return View(tipoPlantilla);
         }
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(TipoPlantilla tipoPlantilla)
+        public async Task<IActionResult> Create(TipoPlantillaModel tipoPlantilla)
         {
             if (!ModelState.IsValid)
             {
@@ -43,12 +45,12 @@ namespace PresupuestoDemo.Controllers
             //@UsuarioLog, se lee de manera dinamica
             tipoPlantilla.UsuarioLog = servicioUsuarios.GetUserLog();
 
-            var yaExisteTipoPlantilla = await repositorioTipoPlantilla.ExisteTipoPlantilla(tipoPlantilla.TipoDePlantilla);
+            var yaExisteTipoPlantilla = await repositorioTipoPlantilla.ExisteTipoPlantilla(tipoPlantilla.TipoPlantilla);
 
             if (yaExisteTipoPlantilla)
             {
-                ModelState.AddModelError(nameof(tipoPlantilla.TipoDePlantilla),
-                                        $"El tipo de plantilla {tipoPlantilla.TipoDePlantilla} ya existe");
+                ModelState.AddModelError(nameof(tipoPlantilla.TipoPlantilla),
+                                        $"El tipo de plantilla {tipoPlantilla.TipoPlantilla} ya existe");
                 return View(tipoPlantilla);
             }
 
@@ -58,10 +60,10 @@ namespace PresupuestoDemo.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Update (int plantillaID)
+        public async Task<ActionResult> Update (int id)
         {
             string usuarioLog = servicioUsuarios.GetUserLog();
-            var tipoPlantilla = await repositorioTipoPlantilla.GetByID(plantillaID, usuarioLog);
+            var tipoPlantilla = await repositorioTipoPlantilla.GetByID(id, usuarioLog);
 
             if (tipoPlantilla is null)
             {
@@ -71,17 +73,17 @@ namespace PresupuestoDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update (TipoPlantilla tipoPlantilla)
+        public async Task<ActionResult> Update (TipoPlantillaModel tipoPlantillaModel)
         {
             string usuarioLog = servicioUsuarios.GetUserLog();
-            var tipoCuentaExiste = await repositorioTipoPlantilla.GetByID(tipoPlantilla.Id_TipoPlantilla, usuarioLog);
+            var tipoCuentaExiste = await repositorioTipoPlantilla.GetByID(tipoPlantillaModel.Id_TipoPlantilla, usuarioLog);
 
             if (tipoCuentaExiste is null)
             {
                 return RedirectToAction("NoEncontrado", "Home");
             }
 
-            await repositorioTipoPlantilla.Update(tipoPlantilla);
+            await repositorioTipoPlantilla.Update(tipoPlantillaModel);
             return RedirectToAction("Index");
         }
 

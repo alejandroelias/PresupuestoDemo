@@ -11,11 +11,11 @@ namespace PresupuestoDemo.Servicios
 {
     public interface IRepositorioTipoPlantilla
     {
-        Task Create(TipoPlantilla tipoPlantilla);
+        Task Create(TipoPlantillaModel tipoPlantilla);
         Task<bool> ExisteTipoPlantilla(string descripcionPlantilla);
-        Task<TipoPlantilla> GetByID(int tipoPlantillaID, string usuarioLog);
-        Task<IEnumerable<TipoPlantilla>> Get(int plantillaID);
-        Task Update(TipoPlantilla tipoPlantilla);
+        Task<TipoPlantillaModel> GetByID(int tipoPlantillaID, string usuarioLog);
+        Task<IEnumerable<TipoPlantillaModel>> Get();
+        Task Update(TipoPlantillaModel tipoPlantilla);
     }
 
     public class RepositorioTipoPlantilla : IRepositorioTipoPlantilla
@@ -26,7 +26,7 @@ namespace PresupuestoDemo.Servicios
             connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task Create(TipoPlantilla tipoPlantilla)
+        public async Task Create(TipoPlantillaModel tipoPlantilla)
         {
             using var connection = new SqlConnection(connectionString);
 
@@ -52,33 +52,32 @@ namespace PresupuestoDemo.Servicios
             return existeTipoPlantilla == 1;
         }
 
-        public async Task<IEnumerable<TipoPlantilla>> Get(int plantillaID)
+        public async Task<IEnumerable<TipoPlantillaModel>> Get()
         {
             using var connection = new SqlConnection(connectionString);
-            return await connection.QueryAsync<TipoPlantilla>(@"SELECT *
-                                                                FROM [GRL].[TipoPlantilla]",
-                                                                new { plantillaID });
+            return await connection.QueryAsync<TipoPlantillaModel>(@"SELECT *
+                                                                FROM [GRL].[TipoPlantilla]");
         }
 
-        public async Task Update(TipoPlantilla tipoPlantilla)
+        public async Task Update(TipoPlantillaModel tipoPlantilla)
         {
             using var connection = new SqlConnection(connectionString);
             await connection.ExecuteAsync(@"UPDATE GRL.TipoPlantilla SET TipoPlantilla=@TipoPlantilla 
                                             WHERE Id_TipoPlantilla=@Id_TipoPlantilla", tipoPlantilla);
         }
 
-        public async Task<TipoPlantilla> GetByID(int tipoPlantillaID, string usuarioLog)
+        public async Task<TipoPlantillaModel> GetByID(int Id_TipoPlantilla, string usuarioLog)
         {
             using var connection = new SqlConnection(connectionString);
-            return await connection.QueryFirstOrDefaultAsync<TipoPlantilla>(@"SELECT [Id_TipoPlantilla]
-                                                                              ,[TipoPlantilla]
-                                                                              ,[EsActiva]
-                                                                              ,[UsuarioLog]
-                                                                              ,[Codigo]
-                                                                            FROM [Presupuesto].[GRL].[TipoPlantilla]
+            return await connection.QueryFirstOrDefaultAsync<TipoPlantillaModel>(@"SELECT 
+                                                                                Id_TipoPlantilla
+                                                                                ,TipoPlantilla
+                                                                                ,EsActiva
+                                                                                ,Codigo
+                                                                            FROM [GRL].[TipoPlantilla]
                                                                             WHERE [Id_TipoPlantilla]=@Id_TipoPlantilla 
                                                                             AND [UsuarioLog]=@UsuarioLog",
-                                                                          new { tipoPlantillaID, usuarioLog}); 
+                                                                          new { Id_TipoPlantilla, usuarioLog}); 
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TipoPlantilla>
+﻿@model IEnumerable<TipoPlantillaModel>
 @{
     ViewData["Title"] = "Tipos Plantillas";
 }
@@ -16,15 +16,15 @@
     </thead>
 
     <tbody>
-        @foreach (var tipoCuenta in Model)
+        @foreach (var tipotipoPlantillaModel in Model)
         {
             <tr>
                 <td>
-                    <a class="btn btn-primary">Editar</a>
+                    <a class="btn btn-primary" asp-action="Update" asp-route-id="@tipotipoPlantillaModel.Id_TipoPlantilla">Editar</a>
                     <a class="btn btn-danger">Eliminar</a>
                 </td>
                 <td>
-                    @tipoCuenta.TipoDePlantilla
+                    @tipotipoPlantillaModel.TipoPlantilla
                 </td>
             </tr>
         }

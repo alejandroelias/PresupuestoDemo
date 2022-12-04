@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PresupuestoDemo.Models
 {
-    public class TipoPlantilla : IValidatableObject
+    public class TipoPlantillaModel : IValidatableObject
     {
         public int Id_TipoPlantilla { get; set; }
 
@@ -16,7 +16,7 @@ namespace PresupuestoDemo.Models
         [Display(Name = "Tipo de plantilla")]
         [PrimeraLetraMayuscula]
         [Remote(action: "VerificarExisteTipoPlantilla", controller: "TipoPlantilla")]
-        public string TipoDePlantilla { get; set; }
+        public string TipoPlantilla { get; set; }
 
         [Required(ErrorMessage = "El campo Activa es requerido")]
         [Display(Name = "Activa")]
@@ -24,7 +24,6 @@ namespace PresupuestoDemo.Models
 
         public string UsuarioLog { get; set; }
 
-        //TODO: Este campo no funciona con la inserccion
         internal DateTime FechaModificacionLog { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "El campo {0} es requerido")]

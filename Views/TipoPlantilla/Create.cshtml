@@ -1,4 +1,4 @@
-﻿@model TipoPlantilla
+﻿@model TipoPlantillaModel
 
 @{
     ViewData["Title"] = "Crear Tipo de Plantilla";
@@ -17,13 +17,13 @@
 
 <form asp-controller="TipoPlantilla" asp-action="Create">
     <div class="mb-3">
-        <label asp-for="TipoDePlantilla"
+        <label asp-for="TipoPlantilla"
                class="col-form-label">
         </label>
         <input type="text"
-               asp-for="TipoDePlantilla"
+               asp-for="TipoPlantilla"
                class="form-control" />
-        <span asp-validation-for="TipoDePlantilla" class="text-danger"></span>
+        <span asp-validation-for="TipoPlantilla" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
