@@ -60,7 +60,7 @@ namespace PresupuestoDemo.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Update (int id)
+        public async Task<IActionResult> Update(int id)
         {
             string usuarioLog = servicioUsuarios.GetUserLog();
             var tipoPlantilla = await repositorioTipoPlantilla.GetByID(id, usuarioLog);
@@ -73,7 +73,7 @@ namespace PresupuestoDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update (TipoPlantillaModel tipoPlantillaModel)
+        public async Task<IActionResult> Update(TipoPlantillaModel tipoPlantillaModel)
         {
             string usuarioLog = servicioUsuarios.GetUserLog();
             var tipoCuentaExiste = await repositorioTipoPlantilla.GetByID(tipoPlantillaModel.Id_TipoPlantilla, usuarioLog);
@@ -84,6 +84,33 @@ namespace PresupuestoDemo.Controllers
             }
 
             await repositorioTipoPlantilla.Update(tipoPlantillaModel);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            string usuarioLog = servicioUsuarios.GetUserLog();
+            var tipoPlantilla = await repositorioTipoPlantilla.GetByID(id, usuarioLog);
+
+            if (tipoPlantilla is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+            return View(tipoPlantilla);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTipoPlantilla(int Id_TipoPlantilla)
+        {
+            string usuarioLog = servicioUsuarios.GetUserLog();
+            var tipoCuentaExiste = await repositorioTipoPlantilla.GetByID(Id_TipoPlantilla, usuarioLog);
+
+            if (tipoCuentaExiste is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+
+            await repositorioTipoPlantilla.Delete(Id_TipoPlantilla);
             return RedirectToAction("Index");
         }
 

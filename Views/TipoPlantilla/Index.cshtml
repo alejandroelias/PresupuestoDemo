@@ -3,6 +3,17 @@
     ViewData["Title"] = "Tipos Plantillas";
 }
 
+@section Styles
+{
+    <style type="text/css">
+        #sortTipoPlantilla tr {
+            cursor: move;
+        }
+    </style>
+}
+
+
+
 <h1>Tipos de Plantillas</h1>
 
 <a asp-action="Create" class="btn btn-primary mb-3">Nuevo Tipo Plantilla</a>
@@ -15,13 +26,13 @@
         </tr>
     </thead>
 
-    <tbody>
+    <tbody id="sortTipoPlantilla">
         @foreach (var tipotipoPlantillaModel in Model)
         {
             <tr>
                 <td>
                     <a class="btn btn-primary" asp-action="Update" asp-route-id="@tipotipoPlantillaModel.Id_TipoPlantilla">Editar</a>
-                    <a class="btn btn-danger">Eliminar</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@tipotipoPlantillaModel.Id_TipoPlantilla">Borrar</a>
                 </td>
                 <td>
                     @tipotipoPlantillaModel.TipoPlantilla
@@ -31,3 +42,9 @@
     </tbody>
 
 </table>
+
+@section Scripts {
+    <script>
+        $(() => $("#sortTipoPlantilla").sortable());
+    </script>
+}
