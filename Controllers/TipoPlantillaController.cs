@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace PresupuestoDemo.Controllers
 {
+
     public class TipoPlantillaController : Controller
     {
         private readonly IRepositorioTipoPlantilla repositorioTipoPlantilla;
@@ -119,6 +120,23 @@ namespace PresupuestoDemo.Controllers
         {
             var yaExisteTipoPlantilla = await repositorioTipoPlantilla.ExisteTipoPlantilla(tipoDePlantilla);
             return yaExisteTipoPlantilla ? Json($"El tipo de plantilla {tipoDePlantilla} ya existe") : Json(true);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Ordenar([FromBody] List<string> data)
+        {
+
+            var tiposPlantillasOrdenados = data
+                                            .Select((valor, indice) =>
+                                                new TipoPlantillaModel()
+                                                {
+                                                    Id_TipoPlantilla = Int32.Parse(valor),
+                                                    Orden = indice + 1
+                                                }).AsEnumerable();
+
+            await repositorioTipoPlantilla.Sort(tiposPlantillasOrdenados);
+
+            return Ok();
         }
     }
 }

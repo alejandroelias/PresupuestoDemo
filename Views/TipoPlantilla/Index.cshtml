@@ -6,13 +6,11 @@
 @section Styles
 {
     <style type="text/css">
-        #sortTipoPlantilla tr {
+        #reordenable tr {
             cursor: move;
         }
     </style>
 }
-
-
 
 <h1>Tipos de Plantillas</h1>
 
@@ -26,11 +24,12 @@
         </tr>
     </thead>
 
-    <tbody id="sortTipoPlantilla">
+    <tbody id="reordenable">
         @foreach (var tipotipoPlantillaModel in Model)
         {
             <tr>
                 <td>
+                    <input type="hidden" value="@tipotipoPlantillaModel.Id_TipoPlantilla" class="ids" />
                     <a class="btn btn-primary" asp-action="Update" asp-route-id="@tipotipoPlantillaModel.Id_TipoPlantilla">Editar</a>
                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@tipotipoPlantillaModel.Id_TipoPlantilla">Borrar</a>
                 </td>
@@ -45,6 +44,42 @@
 
 @section Scripts {
     <script>
-        $(() => $("#sortTipoPlantilla").sortable());
+
+        const urlOrdenar = '@Url.Action("Ordenar")';
+
+        $(() => {
+
+            $("#reordenable").sortable({
+                stop: async (e, ui) => {
+                    await actualizarOrdenes();
+                }
+            });
+
+            const actualizarOrdenes = async () => {
+                const ids = obtenerIdsDeElementos();
+                await enviarIdsAlBackend(ids);
+            };
+
+            const obtenerIdsDeElementos = () => {
+                const ids = $(".ids").map(function () {
+                    return $(this).val();
+                }).get();
+                return ids;
+            };
+
+            const enviarIdsAlBackend = async (ids) => {
+                var data = JSON.stringify(ids);
+                console.table(data);
+
+                await fetch(urlOrdenar, {
+                    method: 'POST',
+                    body: data,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            };
+        });
+
     </script>
 }

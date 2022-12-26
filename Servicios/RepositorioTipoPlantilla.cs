@@ -18,6 +18,7 @@ namespace PresupuestoDemo.Servicios
 
         Task Update(TipoPlantillaModel tipoPlantilla);
         Task Delete(int Id_TipoPlantilla);
+        Task Sort(IEnumerable<TipoPlantillaModel> tipoPlantillaSort);
     }
 
     public class RepositorioTipoPlantilla : IRepositorioTipoPlantilla
@@ -59,7 +60,8 @@ namespace PresupuestoDemo.Servicios
         {
             using var connection = new SqlConnection(connectionString);
             return await connection.QueryAsync<TipoPlantillaModel>(@"SELECT *
-                                                                FROM [GRL].[TipoPlantilla]");
+                                                                FROM [GRL].[TipoPlantilla]
+                                                                ORDER BY Orden");
         }
 
         public async Task Update(TipoPlantillaModel tipoPlantilla)
@@ -88,6 +90,13 @@ namespace PresupuestoDemo.Servicios
             using var connection = new SqlConnection(connectionString);
             await connection.ExecuteAsync("DELETE [GRL].[TipoPlantilla] WHERE Id_TipoPlantilla=@Id_TipoPlantilla", new { Id_TipoPlantilla });
 
+        }
+
+        public async Task Sort(IEnumerable<TipoPlantillaModel> tipoPlantillaSort)
+        {
+            var query = "UPDATE [GRL].[TipoPlantilla] SET Orden= @Orden WHERE Id_TipoPlantilla=@Id_TipoPlantilla;";
+            using var connection = new SqlConnection(connectionString);
+            await connection.ExecuteAsync(query, tipoPlantillaSort);
         }
     }
 }

@@ -29,6 +29,8 @@ namespace PresupuestoDemo.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         public string Codigo { get; set; }
 
+        public int Orden { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Codigo != null && Codigo.Length > 0)
