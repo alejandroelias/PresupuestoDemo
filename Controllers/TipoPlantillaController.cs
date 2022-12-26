@@ -36,26 +36,26 @@ namespace PresupuestoDemo.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(TipoPlantillaModel tipoPlantilla)
+        public async Task<IActionResult> Create(TipoPlantillaModel tipoPlantillaModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(tipoPlantilla);
+                return View(tipoPlantillaModel);
             }
 
             //@UsuarioLog, se lee de manera dinamica
-            tipoPlantilla.UsuarioLog = servicioUsuarios.GetUserLog();
+            tipoPlantillaModel.UsuarioLog = servicioUsuarios.GetUserLog();
 
-            var yaExisteTipoPlantilla = await repositorioTipoPlantilla.ExisteTipoPlantilla(tipoPlantilla.TipoPlantilla);
+            var yaExisteTipoPlantilla = await repositorioTipoPlantilla.ExisteTipoPlantilla(tipoPlantillaModel.TipoPlantilla);
 
             if (yaExisteTipoPlantilla)
             {
-                ModelState.AddModelError(nameof(tipoPlantilla.TipoPlantilla),
-                                        $"El tipo de plantilla {tipoPlantilla.TipoPlantilla} ya existe");
-                return View(tipoPlantilla);
+                ModelState.AddModelError(nameof(tipoPlantillaModel.TipoPlantilla),
+                                        $"El tipo de plantilla {tipoPlantillaModel.TipoPlantilla} ya existe");
+                return View(tipoPlantillaModel);
             }
 
-            await repositorioTipoPlantilla.Create(tipoPlantilla);
+            await repositorioTipoPlantilla.Create(tipoPlantillaModel);
 
             return RedirectToAction("Index");
         }

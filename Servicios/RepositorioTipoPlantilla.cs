@@ -36,9 +36,14 @@ namespace PresupuestoDemo.Servicios
 
             //TODO: el campo FechaModificacionLog no funciona
             var idTipoPlantilla = await connection.QuerySingleAsync<int>
-                ($@"insert into GRL.TipoPlantilla(TipoPlantilla, EsActiva, UsuarioLog, FechaModificacionLog, Codigo)
-                values (@TipoDePlantilla, @EsActiva, @UsuarioLog, '20221102', @Codigo);
-                select SCOPE_IDENTITY();", tipoPlantilla);
+                ($"Sp_Insert_TipoPlantilla",
+                new
+                {
+                    Descripcion = tipoPlantilla.TipoPlantilla,
+                    UsuarioLog = tipoPlantilla.UsuarioLog,
+                    Codigo = tipoPlantilla.Codigo
+                },
+                commandType: System.Data.CommandType.StoredProcedure);
 
             tipoPlantilla.Id_TipoPlantilla = idTipoPlantilla;
         }
@@ -85,7 +90,7 @@ namespace PresupuestoDemo.Servicios
                                                                           new { Id_TipoPlantilla, usuarioLog });
         }
 
-        public async Task Delete (int Id_TipoPlantilla)
+        public async Task Delete(int Id_TipoPlantilla)
         {
             using var connection = new SqlConnection(connectionString);
             await connection.ExecuteAsync("DELETE [GRL].[TipoPlantilla] WHERE Id_TipoPlantilla=@Id_TipoPlantilla", new { Id_TipoPlantilla });
